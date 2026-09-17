@@ -8,7 +8,13 @@ from google import genai
 from google.genai import types
 
 load_dotenv()
-api_key = os.getenv("GEMINI_API_KEY")
+
+# Check Streamlit Cloud secrets first, then fallback to os.getenv / .envgit add requirements.txt
+api_key = st.secrets.get("GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY")
+
+if not api_key:
+    st.error("Missing GEMINI_API_KEY. Please add it to your Streamlit Cloud Secrets or local .env file.")
+    st.stop()
 
 st.set_page_config(page_title="ArchScale AS-02 Engine", layout="wide")
 
